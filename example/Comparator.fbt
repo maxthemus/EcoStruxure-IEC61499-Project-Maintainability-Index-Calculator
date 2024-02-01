@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="eaaa2abb-5007-4ce9-8cf4-571c68fa1ed2" Name="Comparator" Comment="Composite Function Block Type" Namespace="Main">
+  <Attribute Name="Configuration.FB.IDCounter" Value="4" />
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/10/2023" Remarks="template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request">
+        <With Var="overcurrentThreshold" />
+      </Event>
+      <Event Name="REQ" Comment="Normal Execution Request" />
+      <Event Name="SAMPLE">
+        <With Var="AmpSV" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="DEBUG">
+        <With Var="debug_Op_general" />
+      </Event>
+      <Event Name="OP">
+        <With Var="Op" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="overcurrentThreshold" Type="LREAL" />
+      <VarDeclaration Name="AmpSV" Type="SAV" Namespace="Main" Comment="Input event qualifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="debug_Op_general" Type="BOOL" />
+      <VarDeclaration Name="Op" Type="ACT" Namespace="Main" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB ID="4" UID="2" Name="FB1" Type="PIOC_Logic" x="1700" y="620" Namespace="Main" />
+    <Input Name="INIT" x="1160" y="512" Type="Event" />
+    <Input Name="REQ" x="1160" y="572" Type="Event" />
+    <Input Name="overcurrentThreshold" x="760" y="1072" Type="Data" />
+    <Input Name="AmpSV" x="957.1042" y="1012" Type="Data" />
+    <Input Name="SAMPLE" x="1089.448" y="752" Type="Event" />
+    <Output Name="Op" x="2740.99" y="1012" Type="Data" />
+    <Output Name="OP" x="2905.177" y="752" Type="Event" />
+    <Output Name="DEBUG" x="2940.135" y="812" Type="Event" />
+    <Output Name="debug_Op_general" x="2880" y="1072" Type="Data" />
+    <Output Name="INITO" x="2960" y="632" Type="Event" />
+    <Output Name="CNF" x="2980" y="692" Type="Event" />
+    <EventConnections>
+      <Connection Source="INIT" Destination="FB1.INIT" dx1="151.4166">
+        <AvoidsNodes>false</AvoidsNodes>
+      </Connection>
+      <Connection Source="REQ" Destination="FB1.REQ" dx1="49.54163" />
+      <Connection Source="FB1.INITO" Destination="INITO" />
+      <Connection Source="FB1.CNF" Destination="CNF" />
+      <Connection Source="FB1.DEBUG" Destination="DEBUG" />
+      <Connection Source="SAMPLE" Destination="FB1.SAMPLE" />
+      <Connection Source="FB1.OP" Destination="OP" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="overcurrentThreshold" Destination="FB1.overcurrentThreshold" />
+      <Connection Source="FB1.debug_Op_general" Destination="debug_Op_general" />
+      <Connection Source="AmpSV" Destination="FB1.AmpSV" />
+      <Connection Source="FB1.Op" Destination="Op" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

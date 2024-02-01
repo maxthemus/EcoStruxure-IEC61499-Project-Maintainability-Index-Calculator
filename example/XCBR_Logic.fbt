@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="b81760c8-b5d6-47ca-ae86-2248933d3a87" Name="XCBR_Logic" Comment="Basic Function Block Type" Namespace="Main">
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/11/2023" Remarks="Template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="REQ" Comment="Normal Execution Request" />
+      <Event Name="OPOPN">
+        <With Var="OpOpn" />
+      </Event>
+      <Event Name="OPCLS">
+        <With Var="OpCls" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="LOC">
+        <With Var="Loc" />
+      </Event>
+      <Event Name="OPCNT">
+        <With Var="OpCnt" />
+      </Event>
+      <Event Name="POS">
+        <With Var="Pos" />
+      </Event>
+      <Event Name="BLKOPN">
+        <With Var="BlkOpn" />
+      </Event>
+      <Event Name="BLKCLS">
+        <With Var="BlkCls" />
+      </Event>
+      <Event Name="OPERATE_CB">
+        <With Var="openCB" />
+      </Event>
+      <Event Name="DEBUG">
+        <With Var="debug_Pos_stVal" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="OpOpn" Type="ACT" Namespace="Main" Comment="Input event qualifier" />
+      <VarDeclaration Name="OpCls" Type="ACT" Namespace="Main" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="Loc" Type="SPS" Namespace="Main" />
+      <VarDeclaration Name="OpCnt" Type="INS" Namespace="Main" />
+      <VarDeclaration Name="Pos" Type="DPC" Namespace="Main" />
+      <VarDeclaration Name="BlkOpn" Type="SPC" Namespace="Main" />
+      <VarDeclaration Name="BlkCls" Type="SPC" Namespace="Main" />
+      <VarDeclaration Name="openCB" Type="BOOL" />
+      <VarDeclaration Name="debug_Pos_stVal" Type="DINT" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <Attribute Name="FBType.Basic.Algorithm.Order" Value="INIT,REQ,openCB,closeCB,debugOpenCB,debugCloseCB" />
+    <ECC>
+      <ECState Name="START" Comment="Initial State" x="552.9412" y="429.4117" />
+      <ECState Name="INIT" Comment="Initialization" x="923.5294" y="141.1765">
+        <ECAction Algorithm="INIT" Output="INITO" />
+      </ECState>
+      <ECState Name="Wait" Comment="Normal execution" x="1381.647" y="660.9412" />
+      <ECState Name="OpenCB" x="2064" y="1068">
+        <ECAction Algorithm="openCB" Output="POS" />
+        <ECAction Output="CNF" />
+        <ECAction Output="OPERATE_CB" />
+        <ECAction Algorithm="debugOpenCB" Output="DEBUG" />
+      </ECState>
+      <ECState Name="CloseCB" x="516" y="1084">
+        <ECAction Algorithm="closeCB" Output="POS" />
+        <ECAction Output="CNF" />
+        <ECAction Output="OPERATE_CB" />
+        <ECAction Algorithm="debugCloseCB" Output="DEBUG" />
+      </ECState>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="731.1476" y="204.8375" />
+      <ECTransition Source="INIT" Destination="Wait" Condition="1" x="1227.485" y="352.9437">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="294.8969,66.98873,325.0325,102.0015" />
+      </ECTransition>
+      <ECTransition Source="Wait" Destination="OpenCB" Condition="OPOPN[OpOpn.general]" x="1767.577" y="796.1437">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="422.3719,182.0355,464.6557,207.26" />
+      </ECTransition>
+      <ECTransition Source="OpenCB" Destination="Wait" Condition="1" x="1711.402" y="942.2628">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="451.8478,253.7299,409.5639,228.5054" />
+      </ECTransition>
+      <ECTransition Source="Wait" Destination="CloseCB" Condition="OPCLS[OpCls.general]" x="773.1215" y="749.0398">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="209.5569,165.6281,154.2749,192.6455" />
+      </ECTransition>
+      <ECTransition Source="CloseCB" Destination="Wait" Condition="1" x="1061.362" y="882.7744">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="243.3269,234.8295,298.6089,207.8121" />
+      </ECTransition>
+    </ECC>
+    <Algorithm Name="INIT" Comment="Initialization algorithm&#xD;&#xA;&#xD;&#xA;Setting the initial position of the CB to the &quot;Closed&quot; state&#xD;&#xA;&#xD;&#xA;stVal is a coded Enum: &quot;1:intermediate-state 2:off 3:on 4:bad-state&quot;&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Pos.stVal := Main.stVal#item3;&#xD;&#xA;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="REQ" Comment="Normally executed algorithm">
+      <ST Text=";" />
+    </Algorithm>
+    <Algorithm Name="openCB" Comment="&#xD;&#xA;To open the CB, set Pos_stVal to false&#xD;&#xA;&#xD;&#xA;Setting the initial position of the CB to the &quot;opened&quot; state&#xD;&#xA;&#xD;&#xA;stVal is a coded Enum: &quot;1:intermediate-state 2:off 3:on 4:bad-state&quot;&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Pos.stVal := Main.stVal#item2;&#xD;&#xA;&#xD;&#xA;// Open the CB in our plant model&#xD;&#xA;openCB := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="closeCB" Comment="&#xD;&#xA;To close the CB, set Pos_stVal to true&#xD;&#xA;&#xD;&#xA;Setting the initial position of the CB to the &quot;Closed&quot; state&#xD;&#xA;&#xD;&#xA;stVal is a coded Enum: &quot;1:intermediate-state 2:off 3:on 4:bad-state&quot;&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Pos.stVal := Main.stVal#item3;&#xD;&#xA;&#xD;&#xA;// Close the CB in our plant model&#xD;&#xA;openCB := FALSE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debugOpenCB">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_Pos_stVal := 2;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debugCloseCB">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_Pos_stVal := 3;&#xD;&#xA;" />
+    </Algorithm>
+  </BasicFB>
+</FBType>

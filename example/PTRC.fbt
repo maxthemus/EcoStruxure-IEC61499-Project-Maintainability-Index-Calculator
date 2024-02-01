@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="3f1f32c0-40af-4701-8477-90fa1a976009" Name="PTRC" Comment="Composite Function Block Type" Namespace="Main">
+  <Attribute Name="Configuration.FB.IDCounter" Value="2" />
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/10/2023" Remarks="template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="REQ" Comment="Normal Execution Request" />
+      <Event Name="OPERATE">
+        <With Var="Op" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="DEBUG">
+        <With Var="debug_Tr_general" />
+      </Event>
+      <Event Name="TR">
+        <With Var="Tr" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="Op" Type="ACT" Namespace="Main" Comment="Input event qualifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="debug_Tr_general" Type="BOOL" />
+      <VarDeclaration Name="Tr" Type="ACT" Namespace="Main" Comment="Output event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB ID="2" UID="1" Name="FB1" Type="PTRC_Logic" x="1140" y="740" Namespace="Main" />
+    <Input Name="INIT" x="600" y="632" Type="Event" />
+    <Input Name="REQ" x="600" y="692" Type="Event" />
+    <Input Name="Op" x="580.9896" y="1132" Type="Data" />
+    <Input Name="OPERATE" x="634.0521" y="892" Type="Event" />
+    <Output Name="Tr" x="2009.313" y="1132" Type="Data" />
+    <Output Name="TR" x="2087.563" y="872" Type="Event" />
+    <Output Name="DEBUG" x="2100.135" y="932" Type="Event" />
+    <Output Name="debug_Tr_general" x="2120" y="1192" Type="Data" />
+    <Output Name="INITO" x="2100" y="752" Type="Event" />
+    <Output Name="CNF" x="2100" y="812" Type="Event" />
+    <EventConnections>
+      <Connection Source="FB1.INITO" Destination="INITO" />
+      <Connection Source="FB1.CNF" Destination="CNF" />
+      <Connection Source="INIT" Destination="FB1.INIT" dx1="131.4167">
+        <AvoidsNodes>false</AvoidsNodes>
+      </Connection>
+      <Connection Source="REQ" Destination="FB1.REQ" dx1="49.54169" />
+      <Connection Source="FB1.DEBUG" Destination="DEBUG" />
+      <Connection Source="OPERATE" Destination="FB1.OPERATE" dx1="47.02606" />
+      <Connection Source="FB1.TR" Destination="TR" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="FB1.debug_Tr_general" Destination="debug_Tr_general" />
+      <Connection Source="Op" Destination="FB1.Op" />
+      <Connection Source="FB1.Tr" Destination="Tr" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

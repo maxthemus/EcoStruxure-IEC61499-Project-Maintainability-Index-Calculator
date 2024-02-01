@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="94ce91a3-283d-4706-be9e-d20bdb8ae263" Name="Feeder" Comment="Basic Function Block Type" Namespace="Main">
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="1/9/2024" Remarks="Template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT">
+        <With Var="currentMeasurement" />
+      </Event>
+      <Event Name="REQ" />
+      <Event Name="SAMPLE" />
+      <Event Name="FAULT" />
+      <Event Name="CLEAR_FAULT" />
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="SAMPLE_OUT">
+        <With Var="currentMeasurementOut" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="currentMeasurement" Type="LREAL" Comment="Input event qualifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="currentMeasurementOut" Type="LREAL" Comment="Output event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <Attribute Name="FBType.Basic.Algorithm.Order" Value="INIT,REQ,SAMPLE,FAULT,CLEAR_FAULT" />
+    <InternalVars>
+      <VarDeclaration Name="currentInternal" Type="LREAL" />
+    </InternalVars>
+    <ECC>
+      <ECState Name="START" Comment="Initial State" x="552.9412" y="429.4117" />
+      <ECState Name="INIT" Comment="Initialization" x="1507.529" y="301.1765">
+        <ECAction Algorithm="INIT" Output="INITO" />
+      </ECState>
+      <ECState Name="WAIT" x="1892" y="824" />
+      <ECState Name="SAMPLE" x="3220" y="840">
+        <ECAction Algorithm="SAMPLE" Output="SAMPLE_OUT" />
+      </ECState>
+      <ECState Name="FAULT" x="1984" y="1608">
+        <ECAction Algorithm="FAULT" Output="CNF" />
+      </ECState>
+      <ECState Name="CLEAR_FAULT" x="412" y="852.0001">
+        <ECAction Algorithm="CLEAR_FAULT" Output="CNF" />
+      </ECState>
+      <ECTransition Source="INIT" Destination="WAIT" Condition="1" x="1769.527" y="518.1558">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="432.2599,108.4005,457.9035,143.272" />
+      </ECTransition>
+      <ECTransition Source="WAIT" Destination="SAMPLE" Condition="SAMPLE" x="2502.865" y="754.89">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="580.6187,184.5895,665.4191,184.1253" />
+      </ECTransition>
+      <ECTransition Source="SAMPLE" Destination="WAIT" Condition="1" x="2502.976" y="1022.262">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="665.9987,265.989,579.9644,268.1555" />
+      </ECTransition>
+      <ECTransition Source="WAIT" Destination="FAULT" Condition="FAULT" x="1692.24" y="1218.052">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="404.8772,276.2434,409.9337,333.1243" />
+      </ECTransition>
+      <ECTransition Source="FAULT" Destination="WAIT" Condition="1" x="2079.824" y="1280.333">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="531.9196,353.996,525.8478,296.8927" />
+      </ECTransition>
+      <ECTransition Source="WAIT" Destination="CLEAR_FAULT" Condition="CLEAR_FAULT" x="1190.458" y="626.8224">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="347.8568,142.4017,252.8258,144.5103" />
+      </ECTransition>
+      <ECTransition Source="CLEAR_FAULT" Destination="WAIT" Condition="1" x="1236.536" y="1078.359">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="266.8389,286.171,361.9439,284.3716" />
+      </ECTransition>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="1048.757" y="280.0474">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="231.6554,69.80328,292.7232,61.59969" />
+      </ECTransition>
+    </ECC>
+    <Algorithm Name="INIT" Comment="Initialization algorithm&#xD;&#xA;&#xD;&#xA;Setting the initial current measurement of the Feeder&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;currentInternal := currentMeasurement;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="REQ" Comment="Normally executed algorithm">
+      <ST Text=";" />
+    </Algorithm>
+    <Algorithm Name="SAMPLE" Comment="&#xD;&#xA;Sending out current measurement&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;currentMeasurementOut := currentInternal;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="FAULT" Comment="&#xD;&#xA;Triggering fault current. Fault current set at 1.5x of the normal current&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;currentInternal := currentMeasurement + currentMeasurement/2;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="CLEAR_FAULT">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;currentInternal := 0;&#xD;&#xA;" />
+    </Algorithm>
+  </BasicFB>
+</FBType>

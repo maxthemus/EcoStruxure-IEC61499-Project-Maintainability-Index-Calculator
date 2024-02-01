@@ -1,0 +1,37 @@
+IEEE paper
+
+Link = https://ieeexplore-ieee-org.ezproxy.aut.ac.nz/stamp/stamp.jsp?tp=&arnumber=7301502
+
+Lines of Code (LOC)
+LOC in IEC 61499
+- Counting LOC in Algorithms
+- Count all states and transisitons (Start state counts as a state)
+ LOC of a FB = sum of ECC and all algorithms LOC
+
+LOC(FB) = Summation from i=1 to n (LOC(ALG[i]) + LOC(ECC))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

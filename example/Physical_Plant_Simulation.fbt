@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="0d7b9a16-0fc4-4e93-bc26-8fde8bb894d7" Name="Physical_Plant_Simulation" Comment="Composite Function Block Type" Namespace="Main">
+  <Attribute Name="Configuration.FB.IDCounter" Value="14" />
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/12/2023" Remarks="template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="feeder_1_FAULT" />
+      <Event Name="feeder_2_FAULT" />
+      <Event Name="feeder_3_FAULT" />
+      <Event Name="feeder_4_FAULT" />
+      <Event Name="feeder_5_FAULT" />
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="feeder_1_SAMPLE">
+        <With Var="feeder_1_current_DEBUG" />
+      </Event>
+      <Event Name="feeder_2_SAMPLE">
+        <With Var="feeder_2_current_DEBUG" />
+      </Event>
+      <Event Name="feeder_3_SAMPLE">
+        <With Var="feeder_3_current_DEBUG" />
+      </Event>
+      <Event Name="feeder_4_SAMPLE">
+        <With Var="feeder_4_current_DEBUG" />
+      </Event>
+      <Event Name="feeder_5_SAMPLE">
+        <With Var="feeder_5_current_DEBUG" />
+      </Event>
+    </EventOutputs>
+    <OutputVars>
+      <VarDeclaration Name="feeder_1_current_DEBUG" Type="LREAL" Comment="Output event qualifier" />
+      <VarDeclaration Name="feeder_2_current_DEBUG" Type="LREAL" Comment="Output event qualifier" />
+      <VarDeclaration Name="feeder_3_current_DEBUG" Type="LREAL" Comment="Output event qualifier" />
+      <VarDeclaration Name="feeder_4_current_DEBUG" Type="LREAL" Comment="Output event qualifier" />
+      <VarDeclaration Name="feeder_5_current_DEBUG" Type="LREAL" Comment="Output event qualifier" />
+    </OutputVars>
+    <Sockets>
+      <AdapterDeclaration Name="feeder_1_trip" Type="GOOSE" Namespace="Main" x="1020" y="1280" />
+      <AdapterDeclaration Name="feeder_2_trip" Type="GOOSE" Namespace="Main" x="1020" y="2160" />
+      <AdapterDeclaration Name="feeder_3_trip" Type="GOOSE" Namespace="Main" x="1000" y="2980" />
+      <AdapterDeclaration Name="feeder_4_trip" Type="GOOSE" Namespace="Main" x="980" y="3820" />
+      <AdapterDeclaration Name="feeder_5_trip" Type="GOOSE" Namespace="Main" x="960" y="4640" />
+    </Sockets>
+    <Plugs>
+      <AdapterDeclaration Name="feeder_1_current" Type="SV" Namespace="Main" x="4980" y="1160" />
+      <AdapterDeclaration Name="feeder_2_current" Type="SV" Namespace="Main" x="4960" y="2080" />
+      <AdapterDeclaration Name="feeder_3_current" Type="SV" Namespace="Main" x="4960" y="2880" />
+      <AdapterDeclaration Name="feeder_4_current" Type="SV" Namespace="Main" x="4960" y="3700" />
+      <AdapterDeclaration Name="feeder_5_current" Type="SV" Namespace="Main" x="4960" y="4500" />
+    </Plugs>
+  </InterfaceList>
+  <FBNetwork>
+    <FB ID="1" Name="Feeder1" Type="Feeder" x="2560" y="1040" Namespace="Main">
+      <Parameter Name="currentMeasurement" Value="8" />
+    </FB>
+    <FB ID="2" Name="FB2" Type="E_CYCLE" x="300" y="1160" Namespace="IEC61499.Standard">
+      <Parameter Name="DT" Value="T#1s" />
+    </FB>
+    <FB ID="3" Name="Feeder2" Type="Feeder" x="2560" y="1920" Namespace="Main">
+      <Parameter Name="currentMeasurement" Value="8" />
+    </FB>
+    <FB ID="4" Name="Feeder3" Type="Feeder" x="2560" y="2740" Namespace="Main">
+      <Parameter Name="currentMeasurement" Value="8" />
+    </FB>
+    <FB ID="5" Name="Feeder4" Type="Feeder" x="2540" y="3580" Namespace="Main">
+      <Parameter Name="currentMeasurement" Value="8" />
+    </FB>
+    <FB ID="6" Name="Feeder5" Type="Feeder" x="2540" y="4400" Namespace="Main">
+      <Parameter Name="currentMeasurement" Value="8" />
+    </FB>
+    <FB ID="10" Name="FB1" Type="E_PERMIT" x="1560" y="1280" Namespace="IEC61499.Standard" />
+    <FB ID="11" Name="FB3" Type="E_PERMIT" x="1600" y="2160" Namespace="IEC61499.Standard" />
+    <FB ID="12" Name="FB4" Type="E_PERMIT" x="1580" y="2980" Namespace="IEC61499.Standard" />
+    <FB ID="13" Name="FB5" Type="E_PERMIT" x="1600" y="3820" Namespace="IEC61499.Standard" />
+    <FB ID="14" Name="FB6" Type="E_PERMIT" x="1600" y="4640" Namespace="IEC61499.Standard" />
+    <Input Name="INIT" x="2100" y="1052" Type="Event" />
+    <Input Name="feeder_1_FAULT" x="2080" y="1232" Type="Event" />
+    <Input Name="feeder_2_FAULT" x="2080" y="2112" Type="Event" />
+    <Input Name="feeder_3_FAULT" x="2100" y="2932" Type="Event" />
+    <Input Name="feeder_4_FAULT" x="2100" y="3772" Type="Event" />
+    <Input Name="feeder_5_FAULT" x="2100" y="4592" Type="Event" />
+    <Output Name="feeder_1_SAMPLE" x="3940" y="1172" Type="Event" />
+    <Output Name="feeder_2_SAMPLE" x="3940" y="2052" Type="Event" />
+    <Output Name="feeder_3_SAMPLE" x="3920" y="2872" Type="Event" />
+    <Output Name="feeder_4_SAMPLE" x="3940" y="3712" Type="Event" />
+    <Output Name="feeder_5_SAMPLE" x="3940" y="4532" Type="Event" />
+    <Output Name="feeder_1_current_DEBUG" x="3940" y="1492" Type="Data" />
+    <Output Name="feeder_2_current_DEBUG" x="3920" y="2372" Type="Data" />
+    <Output Name="feeder_3_current_DEBUG" x="3900" y="3192" Type="Data" />
+    <Output Name="feeder_4_current_DEBUG" x="3940" y="4032" Type="Data" />
+    <Output Name="feeder_5_current_DEBUG" x="3940" y="4852" Type="Data" />
+    <Output Name="INITO" x="3940" y="1052" Type="Event" />
+    <EventConnections>
+      <Connection Source="FB2.EO" Destination="Feeder1.SAMPLE" />
+      <Connection Source="INIT" Destination="Feeder1.INIT" />
+      <Connection Source="Feeder1.INITO" Destination="Feeder2.INIT" dx1="40" dx2="30" dy="530" />
+      <Connection Source="Feeder2.INITO" Destination="Feeder3.INIT" dx1="40" dx2="30" dy="530" />
+      <Connection Source="Feeder3.INITO" Destination="Feeder4.INIT" dx1="40" dx2="30" dy="530" />
+      <Connection Source="Feeder4.INITO" Destination="Feeder5.INIT" dx1="40" dx2="30" dy="530" />
+      <Connection Source="Feeder5.INITO" Destination="FB2.START" dx1="53.9375" dx2="50" dy="-110" />
+      <Connection Source="feeder_1_FAULT" Destination="Feeder1.FAULT">
+        <Points>
+          <Points>
+            <X>643.7291</X>
+            <Y>315</Y>
+          </Points>
+          <Points>
+            <X>635</X>
+            <Y>315</Y>
+          </Points>
+        </Points>
+      </Connection>
+      <Connection Source="feeder_2_FAULT" Destination="Feeder2.FAULT">
+        <Points>
+          <Points>
+            <X>643.7291</X>
+            <Y>535</Y>
+          </Points>
+          <Points>
+            <X>635</X>
+            <Y>535</Y>
+          </Points>
+        </Points>
+      </Connection>
+      <Connection Source="FB2.EO" Destination="Feeder2.SAMPLE" dx1="48.5" />
+      <Connection Source="FB2.EO" Destination="Feeder3.SAMPLE" dx1="48.5" />
+      <Connection Source="feeder_3_FAULT" Destination="Feeder3.FAULT" dx1="995.0837" dx2="470" dy="-290" />
+      <Connection Source="feeder_4_FAULT" Destination="Feeder4.FAULT" dx1="975.0837" dx2="450" dy="-290" />
+      <Connection Source="FB2.EO" Destination="Feeder4.SAMPLE" dx1="48.5" />
+      <Connection Source="FB2.EO" Destination="Feeder5.SAMPLE" dx1="48.5" />
+      <Connection Source="feeder_5_FAULT" Destination="Feeder5.FAULT" dx1="975.0837" dx2="450" dy="-290" />
+      <Connection Source="Feeder1.SAMPLE_OUT" Destination="feeder_1_SAMPLE" />
+      <Connection Source="Feeder1.INITO" Destination="INITO" />
+      <Connection Source="Feeder2.SAMPLE_OUT" Destination="feeder_2_SAMPLE" />
+      <Connection Source="Feeder3.SAMPLE_OUT" Destination="feeder_3_SAMPLE" />
+      <Connection Source="Feeder4.SAMPLE_OUT" Destination="feeder_4_SAMPLE" />
+      <Connection Source="Feeder5.SAMPLE_OUT" Destination="feeder_5_SAMPLE" />
+      <Connection Source="Feeder1.SAMPLE_OUT" Destination="feeder_1_current.SAMPLE">
+        <Points>
+          <Points>
+            <X>889.0156</X>
+            <Y>300</Y>
+          </Points>
+          <Points>
+            <X>899.0156</X>
+            <Y>300</Y>
+          </Points>
+          <Points>
+            <X>899.0156</X>
+            <Y>312.5</Y>
+          </Points>
+          <Points>
+            <X>1092.5</X>
+            <Y>312.5</Y>
+          </Points>
+          <Points>
+            <X>1092.5</X>
+            <Y>300</Y>
+          </Points>
+          <Points>
+            <X>1240</X>
+            <Y>300</Y>
+          </Points>
+        </Points>
+      </Connection>
+      <Connection Source="Feeder2.SAMPLE_OUT" Destination="feeder_2_current.SAMPLE" dx1="60" />
+      <Connection Source="Feeder3.SAMPLE_OUT" Destination="feeder_3_current.SAMPLE">
+        <Points>
+          <Points>
+            <X>889.0156</X>
+            <Y>725</Y>
+          </Points>
+          <Points>
+            <X>904.0156</X>
+            <Y>725</Y>
+          </Points>
+          <Points>
+            <X>904.0156</X>
+            <Y>737.5</Y>
+          </Points>
+          <Points>
+            <X>1087.5</X>
+            <Y>737.5</Y>
+          </Points>
+          <Points>
+            <X>1087.5</X>
+            <Y>730</Y>
+          </Points>
+          <Points>
+            <X>1235</X>
+            <Y>730</Y>
+          </Points>
+        </Points>
+      </Connection>
+      <Connection Source="Feeder4.SAMPLE_OUT" Destination="feeder_4_current.SAMPLE">
+        <Points>
+          <Points>
+            <X>884.0156</X>
+            <Y>935</Y>
+          </Points>
+          <Points>
+            <X>894.0156</X>
+            <Y>935</Y>
+          </Points>
+          <Points>
+            <X>894.0156</X>
+            <Y>947.5</Y>
+          </Points>
+          <Points>
+            <X>1092.5</X>
+            <Y>947.5</Y>
+          </Points>
+          <Points>
+            <X>1092.5</X>
+            <Y>935</Y>
+          </Points>
+          <Points>
+            <X>1235</X>
+            <Y>935</Y>
+          </Points>
+        </Points>
+      </Connection>
+      <Connection Source="Feeder5.SAMPLE_OUT" Destination="feeder_5_current.SAMPLE">
+        <Points>
+          <Points>
+            <X>884.0156</X>
+            <Y>1140</Y>
+          </Points>
+          <Points>
+            <X>902.5</X>
+            <Y>1140</Y>
+          </Points>
+          <Points>
+            <X>902.5</X>
+            <Y>1127.5</Y>
+          </Points>
+          <Points>
+            <X>1092.5</X>
+            <Y>1127.5</Y>
+          </Points>
+          <Points>
+            <X>1092.5</X>
+            <Y>1135</Y>
+          </Points>
+          <Points>
+            <X>1235</X>
+            <Y>1135</Y>
+          </Points>
+        </Points>
+      </Connection>
+      <Connection Source="feeder_1_trip.ACTUATE" Destination="FB1.EI" />
+      <Connection Source="FB1.EO" Destination="Feeder1.CLEAR_FAULT" />
+      <Connection Source="feeder_2_trip.ACTUATE" Destination="FB3.EI" />
+      <Connection Source="FB3.EO" Destination="Feeder2.CLEAR_FAULT" />
+      <Connection Source="feeder_3_trip.ACTUATE" Destination="FB4.EI" />
+      <Connection Source="FB4.EO" Destination="Feeder3.CLEAR_FAULT" />
+      <Connection Source="feeder_4_trip.ACTUATE" Destination="FB5.EI" />
+      <Connection Source="FB5.EO" Destination="Feeder4.CLEAR_FAULT" />
+      <Connection Source="feeder_5_trip.ACTUATE" Destination="FB6.EI" />
+      <Connection Source="FB6.EO" Destination="Feeder5.CLEAR_FAULT" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="Feeder1.currentMeasurementOut" Destination="feeder_1_current_DEBUG" />
+      <Connection Source="Feeder2.currentMeasurementOut" Destination="feeder_2_current_DEBUG" />
+      <Connection Source="Feeder3.currentMeasurementOut" Destination="feeder_3_current_DEBUG" />
+      <Connection Source="Feeder4.currentMeasurementOut" Destination="feeder_4_current_DEBUG" />
+      <Connection Source="Feeder5.currentMeasurementOut" Destination="feeder_5_current_DEBUG" />
+      <Connection Source="Feeder1.currentMeasurementOut" Destination="feeder_1_current.currentMeasurement" dx1="93.9375" />
+      <Connection Source="Feeder2.currentMeasurementOut" Destination="feeder_2_current.currentMeasurement" dx1="93.9375" />
+      <Connection Source="Feeder3.currentMeasurementOut" Destination="feeder_3_current.currentMeasurement" dx1="93.9375" />
+      <Connection Source="Feeder4.currentMeasurementOut" Destination="feeder_4_current.currentMeasurement" dx1="93.9375" />
+      <Connection Source="Feeder5.currentMeasurementOut" Destination="feeder_5_current.currentMeasurement" dx1="93.9375" />
+      <Connection Source="feeder_1_trip.openSwitch" Destination="FB1.PERMIT" />
+      <Connection Source="feeder_2_trip.openSwitch" Destination="FB3.PERMIT" />
+      <Connection Source="feeder_3_trip.openSwitch" Destination="FB4.PERMIT" />
+      <Connection Source="feeder_4_trip.openSwitch" Destination="FB5.PERMIT" />
+      <Connection Source="feeder_5_trip.openSwitch" Destination="FB6.PERMIT" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

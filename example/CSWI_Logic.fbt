@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="f92613d0-656a-484f-be4a-f3e22dfd03cd" Name="CSWI_Logic" Comment="Basic Function Block Type" Namespace="Main">
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/11/2023" Remarks="Template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="REQ" Comment="Normal Execution Request" />
+      <Event Name="TR">
+        <With Var="Tr" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="POS">
+        <With Var="Pos" />
+      </Event>
+      <Event Name="OPOPN">
+        <With Var="OpOpn" />
+      </Event>
+      <Event Name="OPCLS">
+        <With Var="OpCls" />
+      </Event>
+      <Event Name="DEBUG">
+        <With Var="debug_OpOpn_general" />
+        <With Var="debug_OpCls_general" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="Tr" Type="ACT" Namespace="Main" Comment="Input event qualifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="Pos" Type="DPC" Namespace="Main" />
+      <VarDeclaration Name="OpOpn" Type="ACT" Namespace="Main" />
+      <VarDeclaration Name="OpCls" Type="ACT" Namespace="Main" />
+      <VarDeclaration Name="debug_OpOpn_general" Type="BOOL" />
+      <VarDeclaration Name="debug_OpCls_general" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <Attribute Name="FBType.Basic.Algorithm.Order" Value="INIT,OpenCB,CloseCB,debugOpenCB,debugCloseCB" />
+    <ECC>
+      <ECState Name="START" Comment="Initial State" x="552.9412" y="429.4117" />
+      <ECState Name="INIT" Comment="Initialization" x="923.5294" y="141.1765">
+        <ECAction Algorithm="INIT" Output="INITO" />
+      </ECState>
+      <ECState Name="Open" Comment="Normal execution" x="1741.647" y="1000.941">
+        <ECAction Algorithm="OpenCB" Output="OPOPN" />
+        <ECAction Output="OPCLS" />
+        <ECAction Output="CNF" />
+        <ECAction Algorithm="debugOpenCB" Output="DEBUG" />
+      </ECState>
+      <ECState Name="Transit" x="1244" y="532" />
+      <ECState Name="Close" x="344" y="996">
+        <ECAction Algorithm="CloseCB" Output="OPCLS" />
+        <ECAction Output="OPOPN" />
+        <ECAction Output="CNF" />
+        <ECAction Algorithm="debugCloseCB" Output="DEBUG" />
+      </ECState>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="731.1476" y="204.8375" />
+      <ECTransition Source="INIT" Destination="Transit" Condition="1" x="1151.954" y="287.413">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="280.4858,56.35943,300.0602,80.23099" />
+      </ECTransition>
+      <ECTransition Source="Transit" Destination="Open" Condition="TR[Tr.general]" x="1752.587" y="659.5721">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="437.5535,142.5785,469.7947,172.9598" />
+      </ECTransition>
+      <ECTransition Source="Open" Destination="Transit" Condition="1" x="1483.812" y="842.6337">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="389.3265,231.8083,357.0853,201.427" />
+      </ECTransition>
+      <ECTransition Source="Transit" Destination="Close" Condition="TR[NOT Tr.general]" x="663.0022" y="682.2037">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="187.676,150.2052,129.5453,180.1749" />
+      </ECTransition>
+      <ECTransition Source="Close" Destination="Transit" Condition="1" x="942.3461" y="821.77">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="215.6143,223.9555,273.7451,193.9859" />
+      </ECTransition>
+    </ECC>
+    <Algorithm Name="INIT" Comment="Initialization algorithm&#xD;&#xA;&#xD;&#xA;Initializing the start state of the CB to the &quot;Closed&quot; State&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;OpOpn.general := FALSE;&#xD;&#xA;OpCls.general := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="OpenCB" Comment="Normally executed algorithm&#xD;&#xA;&#xD;&#xA;To close the circuit breaker, set OpOpn_general to true and OpCls_general to false&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Pos.stVal := Main.stVal#item2;&#xD;&#xA;OpOpn.general := TRUE;&#xD;&#xA;OpCls.general := FALSE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="CloseCB" Comment="&#xD;&#xA;To open the circuit breaker, set OpOpn_general to false and OpCls_general to true&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Pos.stVal := Main.stVal#item3;&#xD;&#xA;OpOpn.general := FALSE;&#xD;&#xA;OpCls.general := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debugOpenCB">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_OpOpn_general := TRUE;&#xD;&#xA;debug_OpCls_general := FALSE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debugCloseCB">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_OpOpn_general := FALSE;&#xD;&#xA;debug_OpCls_general := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+  </BasicFB>
+</FBType>

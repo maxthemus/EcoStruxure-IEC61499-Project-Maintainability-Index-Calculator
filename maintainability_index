@@ -1,0 +1,26 @@
+Maintainability Index = MI
+
+Components:
+Halstead's Volume - HV
+Cyclomatic Complexity - CC
+Lines of Code - LOC 
+% of Comments perCOM
+
+Formula
+Maintainability = 171 - 5.2 * ln(HV) - 0.23 * CC - 16.2 * ln(LOC)
+
+
+Halstead Volume:
+HV = (Total Operators + Total Operands) * log(_2){({Unique Operators + Unique Operands})
+
+Cyclomatic Complexity:
+v(G) = N(edges) - N(nodes) + 2
+- Counts edges and nodes in ECC of FB
+
+In ECC to operator == Algorithm on state || a transition that isn't always true (EG 1)
+There are Unique operators and non unique operators
+
+Operand = condition of a transition || (Algorithm || Output Event
+
+
+To calculate HV for composite block sum all HV values of internet FB and divide by number of FB's

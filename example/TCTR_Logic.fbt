@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="c23aff80-63ca-471f-9e83-1aa1f3ffe105" Name="TCTR_Logic" Comment="Basic Function Block Type" Namespace="Main">
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/10/2023" Remarks="Template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="SAMPLE" Comment="Normal Execution Request">
+        <With Var="currentMeasurement" />
+      </Event>
+      <Event Name="MANUAL">
+        <With Var="manual_currentMeasurement" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="AMPSV">
+        <With Var="AmpSV" />
+      </Event>
+      <Event Name="DEBUG">
+        <With Var="debug_AmpSV_instMag" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="currentMeasurement" Type="LREAL" Comment="Input event qualifier" />
+      <VarDeclaration Name="manual_currentMeasurement" Type="LREAL" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="AmpSV" Type="SAV" Namespace="Main" Comment="Output event qualifier" />
+      <VarDeclaration Name="debug_AmpSV_instMag" Type="LREAL" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <Attribute Name="FBType.Basic.Algorithm.Order" Value="INIT,readMeasurement,debug,manualMeasurements,debug_manual" />
+    <ECC>
+      <ECState Name="START" Comment="Initial State" x="552.9412" y="429.4117" />
+      <ECState Name="INIT" Comment="Initialization" x="923.5294" y="141.1765">
+        <ECAction Algorithm="INIT" Output="INITO" />
+      </ECState>
+      <ECState Name="SampleReading" Comment="Normal execution" x="525.647" y="1064.941">
+        <ECAction Algorithm="readMeasurement" Output="AMPSV" />
+        <ECAction Algorithm="debug" Output="DEBUG" />
+      </ECState>
+      <ECState Name="ManualTesting" x="1496" y="544">
+        <ECAction Algorithm="manualMeasurements" Output="AMPSV" />
+        <ECAction Algorithm="debug_manual" Output="DEBUG" />
+      </ECState>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="731.1476" y="204.8375" />
+      <ECTransition Source="INIT" Destination="START" Condition="1" x="797.5924" y="348.3232" />
+      <ECTransition Source="START" Destination="SampleReading" Condition="SAMPLE" x="823.891" y="770.3905">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="223.8099,172.4003,221.9089,216.664" />
+      </ECTransition>
+      <ECTransition Source="SampleReading" Destination="START" Condition="1" x="538.9922" y="672.1764">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="133.873,183.926,135.774,139.6622" />
+      </ECTransition>
+      <ECTransition Source="START" Destination="ManualTesting" Condition="MANUAL" x="999.1758" y="398.9063">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="223.3054,92.50567,273.0078,98.5449" />
+      </ECTransition>
+      <ECTransition Source="ManualTesting" Destination="START" Condition="1" x="979.6935" y="567.4548">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="269.9923,148.3623,220.2899,142.3232" />
+      </ECTransition>
+    </ECC>
+    <Algorithm Name="INIT" Comment="Initialization algorithm">
+      <ST Text=";" />
+    </Algorithm>
+    <Algorithm Name="readMeasurement" Comment="Normally executed algorithm&#xD;&#xA;&#xD;&#xA;The analogue measurement from the electrical system (plant) is digitalized to an IEC61850 variable&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;AmpSV.instMag.f := currentMeasurement;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debug" Comment="&#xD;&#xA;Debugging&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_AmpSV_instMag := currentMeasurement;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="manualMeasurements" Comment="&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;AmpSV.instMag.f := manual_currentMeasurement;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debug_manual">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_AmpSV_instMag := manual_currentMeasurement;&#xD;&#xA;" />
+    </Algorithm>
+  </BasicFB>
+</FBType>

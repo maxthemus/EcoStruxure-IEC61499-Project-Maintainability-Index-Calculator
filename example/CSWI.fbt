@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="71cb1a41-5725-4b6d-9d41-7eb73971434e" Name="CSWI" Comment="Composite Function Block Type" Namespace="Main">
+  <Attribute Name="Configuration.FB.IDCounter" Value="3" />
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/11/2023" Remarks="template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="REQ" Comment="Normal Execution Request" />
+      <Event Name="TR">
+        <With Var="Tr" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="DEBUG">
+        <With Var="debug_OpOpn_general" />
+        <With Var="debug_OpCls_general" />
+      </Event>
+      <Event Name="POS">
+        <With Var="Pos" />
+      </Event>
+      <Event Name="OPOPN">
+        <With Var="OpOpn" />
+      </Event>
+      <Event Name="OPCLS">
+        <With Var="OpCls" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="Tr" Type="ACT" Namespace="Main" Comment="Input event qualifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="debug_OpOpn_general" Type="BOOL" />
+      <VarDeclaration Name="debug_OpCls_general" Type="BOOL" />
+      <VarDeclaration Name="Pos" Type="DPC" Namespace="Main" />
+      <VarDeclaration Name="OpOpn" Type="ACT" Namespace="Main" />
+      <VarDeclaration Name="OpCls" Type="ACT" Namespace="Main" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB ID="3" UID="1" Name="FB1" Type="CSWI_Logic" x="1400" y="540" Namespace="Main" />
+    <Input Name="INIT" x="1040" y="552" Type="Event" />
+    <Input Name="REQ" x="1040" y="612" Type="Event" />
+    <Input Name="Tr" x="829.3125" y="1052" Type="Data" />
+    <Input Name="TR" x="1047.563" y="672" Type="Event" />
+    <Output Name="Pos" x="2230.313" y="1052" Type="Data" />
+    <Output Name="POS" x="2410.948" y="672" Type="Event" />
+    <Output Name="OpOpn" x="2220.667" y="1112" Type="Data" />
+    <Output Name="OpCls" x="2250.052" y="1172" Type="Data" />
+    <Output Name="OPOPN" x="2398.948" y="732" Type="Event" />
+    <Output Name="OPCLS" x="2383.677" y="792" Type="Event" />
+    <Output Name="DEBUG" x="2500.135" y="852" Type="Event" />
+    <Output Name="debug_OpOpn_general" x="2240" y="1232" Type="Data" />
+    <Output Name="debug_OpCls_general" x="2220" y="1292" Type="Data" />
+    <Output Name="INITO" x="2500" y="552" Type="Event" />
+    <Output Name="CNF" x="2520" y="612" Type="Event" />
+    <EventConnections>
+      <Connection Source="INIT" Destination="FB1.INIT">
+        <AvoidsNodes>false</AvoidsNodes>
+      </Connection>
+      <Connection Source="REQ" Destination="FB1.REQ" />
+      <Connection Source="FB1.INITO" Destination="INITO" />
+      <Connection Source="FB1.CNF" Destination="CNF" />
+      <Connection Source="FB1.DEBUG" Destination="DEBUG" />
+      <Connection Source="TR" Destination="FB1.TR" />
+      <Connection Source="FB1.POS" Destination="POS" />
+      <Connection Source="FB1.OPOPN" Destination="OPOPN" />
+      <Connection Source="FB1.OPCLS" Destination="OPCLS" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="FB1.debug_OpOpn_general" Destination="debug_OpOpn_general" />
+      <Connection Source="FB1.debug_OpCls_general" Destination="debug_OpCls_general" />
+      <Connection Source="Tr" Destination="FB1.Tr" />
+      <Connection Source="FB1.Pos" Destination="Pos" />
+      <Connection Source="FB1.OpOpn" Destination="OpOpn" />
+      <Connection Source="FB1.OpCls" Destination="OpCls" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

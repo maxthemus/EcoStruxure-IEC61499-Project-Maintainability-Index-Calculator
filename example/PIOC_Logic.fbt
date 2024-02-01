@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="709e2537-6d0a-4e7c-9230-727dcd460a30" Name="PIOC_Logic" Comment="Basic Function Block Type" Namespace="Main">
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/10/2023" Remarks="Template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request">
+        <With Var="overcurrentThreshold" />
+      </Event>
+      <Event Name="REQ" Comment="Normal Execution Request" />
+      <Event Name="SAMPLE">
+        <With Var="AmpSV" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="OP">
+        <With Var="Op" />
+      </Event>
+      <Event Name="DEBUG">
+        <With Var="debug_Op_general" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="AmpSV" Type="SAV" Namespace="Main" Comment="Input event qualifier" />
+      <VarDeclaration Name="overcurrentThreshold" Type="LREAL" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="Op" Type="ACT" Namespace="Main" />
+      <VarDeclaration Name="debug_Op_general" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <Attribute Name="FBType.Basic.Algorithm.Order" Value="INIT,resetCounter,increaseCounter,operate,notOperate,debug_Operate,debugNotOperate" />
+    <InternalVars>
+      <VarDeclaration Name="overcurrentCounterInternal" Type="DINT" InitialValue="0" />
+    </InternalVars>
+    <ECC>
+      <ECState Name="START" Comment="Initial State" x="552.9412" y="429.4117" />
+      <ECState Name="INIT" Comment="Initialization" x="923.5294" y="141.1765">
+        <ECAction Algorithm="INIT" Output="INITO" />
+      </ECState>
+      <ECState Name="Transit" Comment="Normal execution" x="1357.647" y="616.9412" />
+      <ECState Name="OvercurrentNotDetected" x="572" y="1588">
+        <ECAction Algorithm="resetCounter" Output="CNF" />
+        <ECAction Algorithm="notOperate" Output="OP" />
+        <ECAction Algorithm="debugNotOperate" Output="DEBUG" />
+      </ECState>
+      <ECState Name="OvercurrentDetected" x="2268" y="1556">
+        <ECAction Algorithm="increaseCounter" Output="CNF" />
+      </ECState>
+      <ECState Name="Compare" x="1332" y="1188" />
+      <ECState Name="Operate" x="2692" y="924">
+        <ECAction Algorithm="operate" Output="OP" />
+        <ECAction Algorithm="debug_Operate" Output="DEBUG" />
+      </ECState>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="731.1476" y="204.8375" />
+      <ECTransition Source="INIT" Destination="Transit" Condition="1" x="1205.213" y="327.3304">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="289.4942,62.43883,317.7349,93.38882" />
+      </ECTransition>
+      <ECTransition Source="Compare" Destination="OvercurrentNotDetected" Condition="AmpSV.instMag.f &lt;= overcurrentThreshold" x="790.8372" y="1325.529">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="215.224,314.4727,164.3358,340.3536" />
+      </ECTransition>
+      <ECTransition Source="Compare" Destination="OvercurrentDetected" Condition="AmpSV.instMag.f &gt; overcurrentThreshold" x="1808.613" y="1291.129">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="417.8366,305.577,481.5213,329.5796" />
+      </ECTransition>
+      <ECTransition Source="Transit" Destination="Compare" Condition="SAMPLE" x="1426.037" y="905.8356">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="362.054,207.2937,360.3074,246.1849" />
+      </ECTransition>
+      <ECTransition Source="OvercurrentNotDetected" Destination="Transit" Condition="1" x="405.4466" y="935.7456">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="32.40804,257.682,90.84217,185.4575" />
+      </ECTransition>
+      <ECTransition Source="OvercurrentDetected" Destination="Operate" Condition="overcurrentCounterInternal &gt;= 10" x="2647.147" y="1264.918">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="656.5358,340.2907,686.0345,296.3211" />
+      </ECTransition>
+      <ECTransition Source="Operate" Destination="Transit" Condition="1" x="2042.906" y="681.2778">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="552.7031,174.4427,470.7086,155.5742" />
+      </ECTransition>
+      <ECTransition Source="OvercurrentDetected" Destination="Transit" Condition="overcurrentCounterInternal &lt; 10" x="2058.656" y="1031.646">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="563.7829,288.1823,496.3514,218.6244" />
+      </ECTransition>
+    </ECC>
+    <Algorithm Name="INIT" Comment="Initialization algorithm">
+      <ST Text=";" />
+    </Algorithm>
+    <Algorithm Name="resetCounter" Comment="&#xD;&#xA;Set the overcurrent counter to 0&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;overcurrentCounterInternal := 0;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="increaseCounter" Comment="&#xD;&#xA;increase the internal overcurrent counter&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;overcurrentCounterInternal := overcurrentCounterInternal + 1;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="operate" Comment="&#xD;&#xA;When an overcurrent fault is detected (after detection of 10 overcurrent measurement), Op_general is set to FALSE&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Op.general := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="notOperate">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Op.general := FALSE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debug_Operate">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_Op_general := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debugNotOperate">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_Op_general := FALSE;&#xD;&#xA;" />
+    </Algorithm>
+  </BasicFB>
+</FBType>

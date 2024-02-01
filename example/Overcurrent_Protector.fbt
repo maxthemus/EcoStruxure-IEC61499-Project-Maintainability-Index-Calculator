@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="3a9e66cd-1abb-4a78-9104-a59d5b686b31" Name="Overcurrent_Protector" Comment="Extracted Composite Function Block Type" Namespace="Main">
+  <Attribute Name="Configuration.FB.IDCounter" Value="6" />
+  <Identification Standard="61499-2" />
+  <VersionInfo Author="Maxth" Date="1/31/2024" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT">
+        <With Var="threshold_CONFIG" />
+        <With Var="trigger_time_CONFIG" />
+      </Event>
+      <Event Name="reset" />
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="CNF" />
+      <Event Name="INITO" />
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="threshold_CONFIG" Type="LREAL" />
+      <VarDeclaration Name="trigger_time_CONFIG" Type="LREAL" />
+    </InputVars>
+    <AdapterInputs>
+      <Adapter Name="current" Type="SV" Namespace="Main" />
+    </AdapterInputs>
+    <AdapterOutputs>
+      <Adapter Name="cutoff" Type="GOOSE" Namespace="Main" />
+    </AdapterOutputs>
+  </InterfaceList>
+  <FBNetwork>
+    <FB ID="1" Name="FB1" Type="Current_Transformer" x="1200" y="120" Namespace="Main">
+      <Parameter Name="manual_currentMeasurement" Value="8" />
+    </FB>
+    <FB ID="2" Name="FB2" Type="Comparator" x="2700" y="120" Namespace="Main">
+      <Parameter Name="overcurrentThreshold" Value="10.0" />
+    </FB>
+    <FB ID="3" Name="FB3" Type="PTRC" x="3980" y="120" Namespace="Main" />
+    <FB ID="4" Name="FB4" Type="CSWI" x="5020" y="120" Namespace="Main" />
+    <FB ID="5" Name="FB7" Type="XCBR" x="6140" y="120" Namespace="Main" />
+    <Input Name="current" x="20" y="572" Type="Adapter" />
+    <Input Name="INIT" x="40" y="152" Type="Event" />
+    <Input Name="reset" x="40" y="212" Type="Event" />
+    <Input Name="threshold_CONFIG" x="40" y="332" Type="Data" />
+    <Input Name="trigger_time_CONFIG" x="40" y="392" Type="Data" />
+    <Output Name="cutoff" x="6940" y="1112" Type="Adapter" />
+    <Output Name="CNF" x="7200" y="232" Type="Event" />
+    <Output Name="INITO" x="7180" y="132" Type="Event" />
+    <EventConnections>
+      <Connection Source="FB1.INITO" Destination="FB2.INIT" />
+      <Connection Source="FB1.AMPSV" Destination="FB2.SAMPLE" dx1="72.60425" />
+      <Connection Source="FB2.INITO" Destination="FB3.INIT" />
+      <Connection Source="FB2.OP" Destination="FB3.OPERATE" dx1="79" />
+      <Connection Source="FB3.INITO" Destination="FB4.INIT" />
+      <Connection Source="FB3.TR" Destination="FB4.TR" dx1="77.521" />
+      <Connection Source="FB4.INITO" Destination="FB7.INIT" />
+      <Connection Source="FB4.OPOPN" Destination="FB7.OPOPN" dx1="71.66699" />
+      <Connection Source="FB4.OPCLS" Destination="FB7.OPCLS" dx1="91.66699" />
+      <Connection Source="INIT" Destination="FB1.INIT" dx1="41.41669" />
+      <Connection Source="FB7.INITO" Destination="INITO" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="FB1.AmpSV" Destination="FB2.AmpSV" />
+      <Connection Source="FB2.Op" Destination="FB3.Op" dx1="99" />
+      <Connection Source="FB3.Tr" Destination="FB4.Tr" dx1="40" />
+      <Connection Source="FB4.OpOpn" Destination="FB7.OpOpn" dx1="111.667" />
+      <Connection Source="FB4.OpCls" Destination="FB7.OpCls" dx1="131.667" />
+    </DataConnections>
+    <AdapterConnections>
+      <Connection Source="current" Destination="FB1.SV" />
+      <Connection Source="FB7.GOOSE" Destination="cutoff" />
+    </AdapterConnections>
+  </FBNetwork>
+</FBType>

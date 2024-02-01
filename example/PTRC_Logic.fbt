@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="8787a7c2-f1b8-45dd-92c4-8977f9d95224" Name="PTRC_Logic" Comment="Basic Function Block Type" Namespace="Main">
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/10/2023" Remarks="Template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="REQ" Comment="Normal Execution Request" />
+      <Event Name="OPERATE">
+        <With Var="Op" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="TR">
+        <With Var="Tr" />
+      </Event>
+      <Event Name="DEBUG">
+        <With Var="debug_Tr_general" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="Op" Type="ACT" Namespace="Main" Comment="Input event qualifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="Tr" Type="ACT" Namespace="Main" Comment="Output event qualifier" />
+      <VarDeclaration Name="debug_Tr_general" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <Attribute Name="FBType.Basic.Algorithm.Order" Value="INIT,Trip,NoTrip,debugTrip,debugNoTrip" />
+    <ECC>
+      <ECState Name="START" Comment="Initial State" x="552.9412" y="429.4117" />
+      <ECState Name="INIT" Comment="Initialization" x="923.5294" y="141.1765">
+        <ECAction Algorithm="INIT" Output="INITO" />
+      </ECState>
+      <ECState Name="Trip" Comment="Normal execution" x="1557.647" y="1020.941">
+        <ECAction Algorithm="Trip" Output="TR" />
+        <ECAction Output="CNF" />
+        <ECAction Algorithm="debugTrip" Output="DEBUG" />
+      </ECState>
+      <ECState Name="Transit" x="1248" y="604" />
+      <ECState Name="NoTrip" x="471.1111" y="1040">
+        <ECAction Algorithm="NoTrip" Output="TR" />
+        <ECAction Output="CNF" />
+        <ECAction Algorithm="debugNoTrip" Output="DEBUG" />
+      </ECState>
+      <ECTransition Source="START" Destination="INIT" Condition="INIT" x="731.1476" y="204.8375" />
+      <ECTransition Source="INIT" Destination="Transit" Condition="1" x="1157.625" y="329.5346">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="281.4407,63.86005,302.3827,93.73163" />
+      </ECTransition>
+      <ECTransition Source="Transit" Destination="Trip" Condition="OPERATE[Op.general]" x="1739.454" y="719.5515">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="445.6832,160.9128,465.0281,186.9609" />
+      </ECTransition>
+      <ECTransition Source="Trip" Destination="Transit" Condition="1" x="1401.908" y="892.2058">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="363.2089,242.5448,342.8691,216.0537" />
+      </ECTransition>
+      <ECTransition Source="Transit" Destination="NoTrip" Condition="OPERATE[NOT Op.general]" x="669.218" y="769.792">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="182.6408,174.7832,129.6315,203.8655" />
+      </ECTransition>
+      <ECTransition Source="NoTrip" Destination="Transit" Condition="1" x="993.5739" y="845.8324">
+        <Attribute Name="Configuration.Transaction.BezierPoints" Value="231.2767,226.5866,280.5207,198.9503" />
+      </ECTransition>
+    </ECC>
+    <Algorithm Name="INIT" Comment="Initialization algorithm">
+      <ST Text=";" />
+    </Algorithm>
+    <Algorithm Name="Trip" Comment="Normally executed algorithm&#xD;&#xA;&#xD;&#xA;When the trip condition is met (i.e. overcurrent fault is detected), Tr_general is set to TRUE.&#xD;&#xA;">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Tr.general := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="NoTrip">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;Tr.general := FALSE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debugTrip">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_Tr_general := TRUE;&#xD;&#xA;" />
+    </Algorithm>
+    <Algorithm Name="debugNoTrip">
+      <ST Text=";&#xD;&#xA;&#xD;&#xA;debug_Tr_general := FALSE;&#xD;&#xA;" />
+    </Algorithm>
+  </BasicFB>
+</FBType>

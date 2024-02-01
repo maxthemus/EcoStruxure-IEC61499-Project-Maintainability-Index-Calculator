@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd">
+<FBType GUID="0a798e14-9b99-4826-bbc0-2e7c2fcdf326" Name="Current_Transformer" Comment="Composite Function Block Type" Namespace="Main">
+  <Attribute Name="Configuration.FB.IDCounter" Value="5" />
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Schneider Electric" Version="0.0" Author="Cheyan" Date="12/10/2023" Remarks="template" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" />
+      <Event Name="MANUAL">
+        <With Var="manual_currentMeasurement" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" />
+      <Event Name="CNF" Comment="Execution Confirmation" />
+      <Event Name="DEBUG">
+        <With Var="debug_AmpSV_instMag" />
+      </Event>
+      <Event Name="AMPSV">
+        <With Var="AmpSV" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="manual_currentMeasurement" Type="LREAL" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="debug_AmpSV_instMag" Type="LREAL" />
+      <VarDeclaration Name="AmpSV" Type="SAV" Namespace="Main" Comment="Output event qualifier" />
+    </OutputVars>
+    <Sockets>
+      <AdapterDeclaration Name="SV" Type="SV" Namespace="Main" x="760" y="1020" />
+    </Sockets>
+  </InterfaceList>
+  <FBNetwork>
+    <FB ID="5" UID="1" Name="FB1" Type="TCTR_Logic" x="1660" y="900" Namespace="Main" />
+    <Input Name="INIT" x="1260" y="912" Type="Event" />
+    <Input Name="MANUAL" x="1180" y="692" Type="Event" />
+    <Input Name="manual_currentMeasurement" x="580" y="1352" Type="Data" />
+    <Output Name="AMPSV" x="2921.313" y="1032" Type="Event" />
+    <Output Name="AmpSV" x="2937.104" y="1292" Type="Data" />
+    <Output Name="DEBUG" x="2940" y="1092" Type="Event" />
+    <Output Name="debug_AmpSV_instMag" x="2940" y="1352" Type="Data" />
+    <Output Name="INITO" x="2940" y="912" Type="Event" />
+    <Output Name="CNF" x="2940" y="972" Type="Event" />
+    <EventConnections>
+      <Connection Source="INIT" Destination="FB1.INIT" />
+      <Connection Source="FB1.INITO" Destination="INITO" />
+      <Connection Source="FB1.CNF" Destination="CNF" />
+      <Connection Source="SV.SAMPLE" Destination="FB1.SAMPLE" dx1="56.35425" />
+      <Connection Source="FB1.DEBUG" Destination="DEBUG" />
+      <Connection Source="MANUAL" Destination="FB1.MANUAL" dx1="24.1875" />
+      <Connection Source="FB1.AMPSV" Destination="AMPSV" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="SV.currentMeasurement" Destination="FB1.currentMeasurement" dx1="40" />
+      <Connection Source="FB1.debug_AmpSV_instMag" Destination="debug_AmpSV_instMag" />
+      <Connection Source="manual_currentMeasurement" Destination="FB1.manual_currentMeasurement" />
+      <Connection Source="FB1.AmpSV" Destination="AmpSV" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>
