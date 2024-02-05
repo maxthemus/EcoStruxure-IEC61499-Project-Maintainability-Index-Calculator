@@ -1,12 +1,14 @@
 import math
 
-class FunctionBlock:
+class FB:
     #Will Create the function block class from the given XML_Dict given .fbt file
-    def __init__(self, name, type):
+    def __init__(self, name, type, xml_dict):
         self.name = name # name of FB
         self.type = type # can be BFB or CFB
         self.children = [] #Array holding if CFB will have children
         self.valid = False #Valid if information has been filed by parsing XML
+
+        self.xml_dict = xml_dict #dict 
 
         #Info Fields
         self.MI = 0
@@ -21,7 +23,14 @@ class FunctionBlock:
     def get_name(self):
         return self.name
 
+    def get_children(self):
+        return self.children
+
     #Setters 
+    def set_type(self, type):
+        self.type = type
+        return
+
     def set_LOC(self, LOC):
         self.LOC = LOC
         self.update_MI()
